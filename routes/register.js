@@ -1,5 +1,5 @@
 var express = require('express');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var verify = require('./middleware.js');
 var router = express.Router();
 var session = require('express-session');

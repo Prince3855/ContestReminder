@@ -66,10 +66,12 @@
                 <div class="card-header bg-success text-white text-center border border-dark mb-2"><b>Your Profile</b>
                 </div>
 
-                <img src="https://media.giphy.com/media/xThuWgCXXixhqFK0yA/giphy.gif" class="card-img-top" alt="Loading...">
+                <div class="div text-center">
+                    <img src="images/user.png" class="card-img-top " alt="Loading..." style="max-width: 350px;">
+                </div>
 
-                <div class="card-body mb-0">
-                    <div class="div">
+                <div class="card-body mb-0 pb-0 text-center">
+                    <div class="div text-center">
                         <i class='fas fa-user-alt mr-1' style='font-size:20px'></i>
                         <h6 class="card-title d-inline-block"><%= user %></h6>
                     </div>
@@ -80,9 +82,9 @@
                 </div>
 
                 <hr>
-                <form action="/profile" method="post">
-                    <ul class="list-group list-group-flush ">
-                        <li class="list-group-item mx-5 border">
+                <form action="/profile" method="post" class="text-center">
+                    <ul class="list-group list-group-flush d-inline-block text-left " >
+                        <li class="list-group-item border px-5">
                             <% if (data.codechef == true){ %>
                             <div class="custom-control custom-checkbox mb-2">
                                 <input type="checkbox" name="contest" class="custom-control-input" value="codechef"
@@ -90,7 +92,7 @@
                                 <label class="custom-control-label" for="codechef">codechef</label>
                             </div>
                             <% }else{ %>
-                            <div class="custom-control custom-checkbox mb-2">
+                            <div class="custom-control custom-checkbox mb-2 ">
                                 <input type="checkbox" name="contest" class="custom-control-input" value="codechef"
                                     id='codechef'>
                                 <label class="custom-control-label" for="codechef">codechef</label>
@@ -153,9 +155,9 @@
                             <% }%>
                         </li>
                     </ul>
-
-                    <div class="card-body">
-                        <button type="submit" class="btn btn-outline-success btn-block"><b>Update</b></button>
+            
+                    <div class="card-body text-center " >
+                        <button type="submit" class="btn  btn-outline-success btn-block px-5 "><b>Update</b></button>
                     </div>
 
                 </form>

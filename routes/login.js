@@ -1,7 +1,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
-var jwt = require('jsonwebtoken');
+var session = require('express-session');
 var router = express.Router();
 
 var verify = require('./middleware.js');  //middleware
@@ -9,15 +9,14 @@ var verify = require('./middleware.js');  //middleware
 var usersModel=require('./users.js');    // user model
 var usersData=usersModel.find({});
 
-//local storage
-if (typeof localStorage === "undefined" || localStorage === null) {
-  var LocalStorage = require('node-localstorage').LocalStorage;
-  localStorage = new LocalStorage('./scratch');
-}
-
 /* GET login page. */
-router.get('/',verify.loginCheck,function(req, res, next) {
-  res.redirect('../');
+router.get('/',function(req, res, next) {
+  let loginToken=req.session.loginuser;
+  if(loginToken){
+    console.log(loginToken);
+    res.redirect('../');
+  }
+  else res.render('login',{msg:""});
 });
 
 
@@ -36,8 +35,7 @@ router.post('/',(req,res,next)=>{
           // password match
           let passwordMatch=bcrypt.compareSync(req.body.password, data.password);
           if(passwordMatch) {
-            let loginToken = jwt.sign({id:data._id,userName:data.userName,email:user.email},'login');
-            localStorage.setItem('user',loginToken);
+            req.session.loginuser=data.userName;
             res.redirect('/');
           }
           else res.render('login',{msg:"*Wrong Password"});

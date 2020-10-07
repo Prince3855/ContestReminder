@@ -2,7 +2,6 @@ var express = require('express');
 var mongoose = require('mongoose');
 var fs = require('fs');
 var path = require('path');
-var jwt = require('jsonwebtoken');
 
 var router = express.Router();
 
@@ -23,13 +22,16 @@ router.get('/', verify.loginCheck, function (req, res, next) {
     let cuurentUser = "";
     let platform;
 
-    let loginToken = localStorage.getItem('user');
-    var check = jwt.verify(loginToken, 'login', (err, user) => {
-        if (err) return res.redirect("login");
-        cuurentUser = user;
-    });
+    let loginToken = req.session.loginuser;
+    if(loginToken){
+        cuurentUser = loginToken;
+    }
+    else{
+        return res.redirect("login");
+    }
+   
 
-    let user = usersModel.findOne({ _id: cuurentUser.id });
+    let user = usersModel.findOne({ userName: cuurentUser});
     user.exec((err, detail) => {
         if (err) throw err;
         platform = detail.contest;
@@ -57,15 +59,20 @@ router.post('/', function (req, res, next) {
     // console.log(platform);
 
 
-    let loginToken = localStorage.getItem('user');
-    var check = jwt.verify(loginToken, 'login', (err, user) => {
-        if (err) return res.redirect("login");
-        usersModel.updateOne({ _id: user.id }, { contest: platform }, (erro, data) => {
-            if (erro) throw erro;
-            res.redirect('profile');
+    let loginToken = req.session.loginuser;
+    if(loginToken){
+        let data = usersModel.findOne({ userName: loginToken});
+        data.exec((err,user)=>{
+            if(err) return res.redirect("login");
+            usersModel.updateOne({ _id: user.id }, { contest: platform }, (erro, data) => {
+                if (erro) throw erro;
+                res.redirect('profile');
+            })
         })
-    });
-
+    }
+    else{
+        return res.redirect("login");
+    }
 
 });
 

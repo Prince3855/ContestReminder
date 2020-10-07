@@ -2,7 +2,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var fs = require('fs'); 
 var path = require('path');
-var jwt = require('jsonwebtoken');
+var session = require('express-session');
 
 var router = express.Router();
 
@@ -18,17 +18,16 @@ var contestData=contestModel.find({});
 router.get('/',verify.loginCheck, function (req, res, next) {
 
   let userName="";
-  let loginToken=localStorage.getItem('user');
-  var check=jwt.verify(loginToken,'login',(err,user)=>{
-    if(err) return res.redirect("login");
-    userName=user.userName;
-    // console.log(user);
-  });
+  let loginToken=req.session.loginuser;
+  userName=loginToken;
 
   contestData.exec((err, contestDetails) => {
     if (err) throw err;
-    // console.log(contestDetails.length);
-    res.render('index', {  data: contestDetails ,user:userName});
+    else{
+      // console.log(contestDetails);
+      res.render('index', {  data: contestDetails ,user:userName});
+    }
+    
   });
   
 });
@@ -36,7 +35,9 @@ router.get('/',verify.loginCheck, function (req, res, next) {
 
 //logout 
 router.post('/',(req,res,next)=>{
-  localStorage.removeItem('user');
+  req.session.destroy((err)=>{
+    if(err) res.redirect('/');
+  });
   res.redirect('login');
 })
 

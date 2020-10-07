@@ -2,33 +2,23 @@ var express = require('express');
 var bcrypt = require('bcrypt');
 var verify = require('./middleware.js');
 var router = express.Router();
-var jwt = require('jsonwebtoken');
+var session = require('express-session');
 
 //user model
 var userModel=require('./users.js');
 var usersData=userModel.find({});
 
-// local storage
-if (typeof localStorage === "undefined" || localStorage === null) {
-    var LocalStorage = require('node-localstorage').LocalStorage;
-    localStorage = new LocalStorage('./scratch');
-}
 
 /* GET Register page. */
 router.get('/',function(req, res, next) {
-  let loginToken=localStorage.getItem('user');
-        try{
-
-            var check=jwt.verify(loginToken,'login',(err,user)=>{
-                if(err) res.render('register',{msg:""});
-                // console.log(user);
-            });
-            
-        }
-        catch(err){
-            return res.render('register',{msg:""});
-        }
-        res.redirect('../');
+  let loginToken=req.session.loginuser;
+  if(loginToken){
+    res.redirect('../');
+  }
+  else{
+    res.render('register',{msg:""});
+  }
+        
 });
 
 

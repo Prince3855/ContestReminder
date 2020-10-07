@@ -1,17 +1,12 @@
 var mongoose = require('mongoose');
-var jwt = require('jsonwebtoken');
 var express = require('express');
 var router = express.Router();
+var session = require('express-session');
 
 //user model
 var usersModel=require('./users.js');
 var usersData=usersModel.find({});
 
-// local storage
-if (typeof localStorage === "undefined" || localStorage === null) {
-    var LocalStorage = require('node-localstorage').LocalStorage;
-    localStorage = new LocalStorage('./scratch');
-}
 
 middlewares={
 
@@ -36,17 +31,11 @@ middlewares={
     /* Login Check */
     loginCheck:(req,res,next)=>{
         
-        let loginToken=localStorage.getItem('user');
-        try{
-
-            var check=jwt.verify(loginToken,'login',(err,user)=>{
-                if(err) return res.render('login',{msg:""});
-                // console.log(user);
-            });
-            
+        let loginToken=req.session.loginuser;
+        if(loginToken){
         }
-        catch(err){
-            return res.render('login',{msg:""});
+        else{
+            return res.redirect('login');
         }
         next();
     }

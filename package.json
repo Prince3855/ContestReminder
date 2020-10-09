@@ -19,6 +19,7 @@
     "https": "^1.0.0",
     "mongoose": "^5.10.5",
     "morgan": "~1.9.1",
+    "node-cron": "^2.0.3",
     "nodemailer": "^6.4.11",
     "request": "^2.88.2"
   }

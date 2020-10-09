@@ -7,7 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('myapp:server');
 var http = require('http');
-
+var nodeCron=require('node-cron');
+var reminderRouter = require('../routes/reminder');
 /**
  * Get port from environment and store in Express.
  */
@@ -48,6 +49,10 @@ function normalizePort(val) {
 
   return false;
 }
+
+//reminder functions run on backend
+nodeCron.schedule('59 23 * * *', reminderRouter.getcontestdata);
+nodeCron.schedule('0 */30 * * * *', reminderRouter.sendMessege);
 
 /**
  * Event listener for HTTP server "error" event.

@@ -25,7 +25,7 @@ let reminderedContest=new Map();
 
 
 
-getContestData = () => {
+exports.getcontestdata=getContestData = () => {
 
     //make request to get contest data
     https.get(apiUrl, (res) => {
@@ -67,10 +67,7 @@ getContestData = () => {
     reminderedContest.clear();
 
 }
-setInterval(getContestData, 12*60*60*1000); //repeate after interval of 12 hours and get contest Details
-
-
-
+// setInterval(getContestData, 24*60*60*1000); //repeate after interval of 12 hours and get contest Details
 
 
 
@@ -79,7 +76,7 @@ setInterval(getContestData, 12*60*60*1000); //repeate after interval of 12 hours
 
 //find apropriare contests and acording to contests platform find apropriate user
 //and send data to the sendReminder function to send contest reminder
-function findUser() {
+exports.sendMessege=function findUser() {
 
     //get contest details from database
     contestData.exec(function (err, contests) {
@@ -93,7 +90,7 @@ function findUser() {
             // console.log((contestdate-today)/(60*60*1000));
             let hours = (contestdate - today) / (60 * 60 * 1000);
            
-            if ( hours>=0 && hours <= 2 && reminderedContest[contest._id]==undefined ) {
+            if ( hours>=0 && hours <= 35 && reminderedContest[contest._id]==undefined ) {
                 // console.log(contest.Platform);
                 
                 //Find user who wants reminder of given contest 
@@ -132,7 +129,7 @@ function findUser() {
         });
     });
 }
-setInterval(findUser, 15*60*1000); //repeate after interval of 15 minutes find (contest,user) and send reminder
+// setInterval(findUser, 15*60*1000); //repeate after interval of 15 minutes find (contest,user) and send reminder
 
 
 
@@ -158,7 +155,7 @@ function sendReminder(user, contest,logoUrl) {
                         .main{
                             display: inline-block;
                             width: 350px;
-                            height: 460px;
+                            height: 400px;
                         }
                         img{
                             margin-left: 115px;
@@ -226,7 +223,7 @@ function sendEmail(emailIdList, messege) {
         if (err) {
             console.log(err)
         } else {
-            // console.log(info);
+            console.log(info);
         }
     });
 
